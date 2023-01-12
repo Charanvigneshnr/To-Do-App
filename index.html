@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>GitHub TODO List</title>
+    <link rel="stylesheet" type="text/css" href="github-theme.css">
+</head>
+
+<body>
+    <h1>GitHub TODO List</h1>
+    <form>
+        <input type="text" id="new-todo" placeholder="Add a new task...">
+        <button type="submit" id="add-todo">Add</button>
+    </form>
+    <ul id="todo-list"></ul>
+    <script>
+        // Get references to the form and list elements
+        const form = document.querySelector("form");
+        const list = document.querySelector("#todo-list");
+        let tasks = []; // array to store the tasks
+
+        // Add a new task when the form is submitted
+        form.addEventListener("submit", event => {
+            event.preventDefault(); // prevent the page from refreshing
+            const input = document.querySelector("#new-todo");
+            const task = input.value;
+            input.value = ""; // clear the input field
+            tasks.push(task);
+            addTask(task);
+        });
+
+        // Add a new task to the list
+        function addTask(task) {
+            const item = document.createElement("li");
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.addEventListener("change", event => {
+                const isChecked = event.target.checked;
+                if (isChecked) {
+                    item.style.textDecoration = "line-through";
+                } else {
+                    item.style.textDecoration = "none";
+                }
+            });
+            const label = document.createElement("label");
+            label.innerHTML = task;
+            const editButton = document.createElement("button");
+            editButton.innerHTML = "Edit";
+            editButton.addEventListener("click", event => {
+                const newTask = prompt("Enter the new task:");
+                if (newTask) {
+                    const index = tasks.indexOf(task);
+                    tasks[index] = newTask;
+                    label.innerHTML = newTask;
+                }
+            });
+            const deleteButton = document.createElement("button");
+            deleteButton.innerHTML = "Delete";
+            deleteButton.addEventListener("click", event => {
+                const index = tasks.indexOf(task);
+                tasks.splice(index, 1);
+                item.remove();
+            });
+            item.appendChild(checkbox);
+            item.appendChild(label);
+            item.appendChild(editButton);
+            item.appendChild(deleteButton);
+            list.appendChild(item);
+        }
+    </script>
+</body>
+
+</html>
